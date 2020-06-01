@@ -1,7 +1,7 @@
 //modules
 const path = require("path");
 const express = require("express");
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/auth");
 
 //express config
 const app = express();
