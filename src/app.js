@@ -1,6 +1,7 @@
 //modules
 const path = require("path");
 const express = require("express");
+const authRoutes = require("./routes/authRoutes");
 
 //express config
 const app = express();
@@ -11,10 +12,11 @@ app.use(express.static(path.join("public")));
 //routes
 app.get("/", (req, res) => {
 	res.render("home", {
-		pageTitle: "Home",
 		path: req.path,
 	});
 });
+
+app.use(authRoutes);
 
 //server
 const PORT = process.env.PORT || 3000;
