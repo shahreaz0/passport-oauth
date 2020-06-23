@@ -14,11 +14,11 @@ router.get("/auth/logout", (req, res) => {
 router.get(
 	"/auth/google",
 	passport.authenticate("google", {
-		scope: ["profile"],
+		scope: ["profile", "email"],
 	}),
 );
 
-router.get("/auth/google/cb", (req, res) => {
+router.get("/auth/google/cb", passport.authenticate("google"), (req, res) => {
 	res.send("google redirect uri");
 });
 
