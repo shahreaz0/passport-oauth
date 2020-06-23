@@ -12,6 +12,13 @@ passport.use(
 		},
 		async (accessToken, refreshToken, profile, cb) => {
 			console.log(profile);
+
+			const user = await User.findOne({ googleId: profile.id });
+
+			if (user) {
+				return console.log("this user already exists");
+			}
+
 			try {
 				const user = new User({
 					username: profile.displayName,
