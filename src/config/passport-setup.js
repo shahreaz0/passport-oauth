@@ -3,6 +3,15 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
 require("dotenv").config();
 
+passport.serializeUser((user, done) => {
+	done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+	const user = User.findById(id);
+	done(user);
+});
+
 passport.use(
 	new GoogleStrategy(
 		{
@@ -10,23 +19,22 @@ passport.use(
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			callbackURL: "/auth/google/cb",
 		},
-		async (accessToken, refreshToken, profile, cb) => {
-			console.log(profile);
-
-			const user = await User.findOne({ googleId: profile.id });
-
-			if (user) {
-				return console.log("this user already exists");
-			}
-
+		async (accessToken, refreshToken, profile, done) => {
 			try {
-				const user = new User({
+				// user exists or not
+				const user = await User.findOne({ googleId: profile.id });
+				if (user) {
+					return done(null, user);
+				}
+
+				// if user not exists create new user
+				const newUser = new User({
 					username: profile.displayName,
 					googleId: profile.id,
 				});
 
-				await user.save();
-				console.log(user);
+				await newUser.save();
+				done(null, newUser);
 			} catch (err) {
 				console.log(err);
 			}
