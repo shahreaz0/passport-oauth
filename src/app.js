@@ -4,8 +4,9 @@ const express = require("express");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
 const authRoutes = require("./routes/auth");
+const profileRoutes = require("./routes/profile");
 
-require("./config/passport-setup");
+require("./config/passportSetup");
 require("./config/db");
 
 //express config
@@ -25,7 +26,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //routes
+app.get("/", (req, res) => {
+	res.render("home", { user: req.user });
+});
 app.use(authRoutes);
+app.use(profileRoutes);
 
 //server
 const PORT = process.env.PORT || 3000;
