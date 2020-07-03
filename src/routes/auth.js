@@ -1,6 +1,12 @@
 const router = require("express").Router();
 const passport = require("passport");
 
+router.get("/", (req, res) => {
+	res.render("home", {
+		path: req.path,
+	});
+});
+
 router.get("/auth/login", (req, res) => {
 	res.render("login", {
 		path: req.path,
@@ -14,12 +20,12 @@ router.get("/auth/logout", (req, res) => {
 router.get(
 	"/auth/google",
 	passport.authenticate("google", {
-		scope: ["profile", "email"],
+		scope: ["profile"],
 	}),
 );
 
 router.get("/auth/google/cb", passport.authenticate("google"), (req, res) => {
-	res.send("google redirect uri");
+	res.send({ userpro: req.user });
 });
 
 module.exports = router;

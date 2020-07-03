@@ -16,7 +16,7 @@ app.use(express.static(path.join("public")));
 app.use(
 	cookieSession({
 		maxAge: 24 * 60 * 60 * 1000,
-		keys: process.env.COOKIE_KEY,
+		keys: [process.env.COOKIE_KEY],
 	}),
 );
 
@@ -25,12 +25,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //routes
-app.get("/", (req, res) => {
-	res.render("home", {
-		path: req.path,
-	});
-});
-
 app.use(authRoutes);
 
 //server
