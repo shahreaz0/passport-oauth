@@ -32,6 +32,10 @@ app.get("/", (req, res) => {
 app.use(authRoutes);
 app.use(profileRoutes);
 
+app.get("*", (req, res) => {
+	res.render("404");
+});
+
 //server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
