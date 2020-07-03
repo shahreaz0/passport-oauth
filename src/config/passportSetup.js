@@ -22,6 +22,7 @@ passport.use(
 		async (accessToken, refreshToken, profile, done) => {
 			try {
 				// user exists or not
+				console.log();
 				const user = await User.findOne({ googleId: profile.id });
 				if (user) {
 					return done(null, user);
@@ -31,9 +32,11 @@ passport.use(
 				const newUser = new User({
 					username: profile.displayName,
 					googleId: profile.id,
+					thumbnail: profile.photos[0].value,
 				});
 
 				await newUser.save();
+				console.log(newUser);
 				done(null, newUser);
 			} catch (err) {
 				console.log(err);
